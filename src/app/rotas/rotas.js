@@ -1,3 +1,5 @@
+const db = require('../../config/database');
+
 module.exports = (app) => {
 
     app.get('/', function(req, resp){
@@ -14,8 +16,14 @@ module.exports = (app) => {
     });
 
     app.get('/livros', function(req, resp){
-        resp.marko(
-            require('../views/livros/lista/lista.marko')
-        )
+        db.all('SELECT * FROM livros', function(erro, resultados) {
+            resp.marko(
+                require('../views/livros/lista/lista.marko'),
+                {
+                    livros: resultados
+                }
+            );
+        });
+    
     });
 }
